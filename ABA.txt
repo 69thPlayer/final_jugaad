@@ -1,0 +1,871 @@
+												PRACTICAL 1 A - 
+
+									Collect data from a real-life business scenario and perform exploratory data
+										analysis (EDA) to gain insights into the dataset.
+
+
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+file_path = r"C:\Users\nites\Downloads\OnlineRetail.csv"
+df = pd.read_csv(file_path, encoding="latin1")
+
+df = df.dropna()
+df["InvoiceDate"] = pd.to_datetime(df["InvoiceDate"])
+
+print(df.describe())
+
+plt.figure(figsize=(10, 6))
+sns.histplot(df["Quantity"], bins=50, kde=True)
+plt.title("Distribution of Quantity Sold")
+plt.xlabel("Quantity")
+plt.ylabel("Frequency")
+plt.show()
+
+df["InvoiceYearMonth"] = df["InvoiceDate"].dt.to_period("M")
+monthly_sales = df.groupby("InvoiceYearMonth")["Quantity"].sum()
+
+plt.figure(figsize=(10, 6))
+monthly_sales.plot(marker="o")
+plt.title("Monthly Sales Trend")
+plt.xlabel("Month")
+plt.ylabel("Total Quantity Sold")
+plt.xticks(rotation=45)
+plt.grid(True)
+plt.show()
+
+customer_orders = df.groupby("CustomerID")["InvoiceNo"].nunique()
+
+plt.figure(figsize=(10, 6))
+sns.histplot(customer_orders, bins=30, kde=True)
+plt.title("Distribution of Number of Orders per Customer")
+plt.xlabel("Number of Orders")
+plt.ylabel("Number of Customers")
+plt.show()
+
+df["TotalPrice"] = df["Quantity"] * df["UnitPrice"]
+customer_clv = df.groupby("CustomerID")["TotalPrice"].sum()
+
+plt.figure(figsize=(10, 6))
+sns.histplot(customer_clv, bins=30, kde=True)
+plt.title("Distribution of Customer Lifetime Value")
+plt.xlabel("Customer Lifetime Value")
+plt.ylabel("Number of Customers")
+plt.show()
+
+
+
+												PRACTICAL 1 - B 
+
+								Analyze customer data to identify trends and patterns that can be used for
+											business decision-making.
+
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+file_path = r"C:\Users\nites\Downloads\OnlineRetail.csv"
+df = pd.read_csv(file_path, encoding="latin1")
+
+df = df.dropna()
+df["InvoiceDate"] = pd.to_datetime(df["InvoiceDate"])
+
+customer_orders = df.groupby("CustomerID")["InvoiceNo"].nunique()
+
+plt.figure(figsize=(10, 6))
+sns.histplot(customer_orders, bins=30, kde=True)
+plt.title("Distribution of Number of Orders per Customer")
+plt.xlabel("Number of Orders")
+plt.ylabel("Number of Customers")
+plt.show()
+
+df["TotalPrice"] = df["Quantity"] * df["UnitPrice"]
+customer_clv = df.groupby("CustomerID")["TotalPrice"].sum()
+
+plt.figure(figsize=(10, 6))
+sns.histplot(customer_clv, bins=30, kde=True)
+plt.title("Distribution of Customer Lifetime Value")
+plt.xlabel("Customer Lifetime Value")
+plt.ylabel("Number of Customers")
+plt.show()
+
+
+
+
+												PRACTICACL 2 - A 
+
+								Obtain a dataset and calculate descriptive statistics (mean, median, mode,
+									variance, etc.) for a specific variable of interest.
+
+
+import pandas as pd
+import matplotlib.pyplot as plt
+
+file_path = r"C:\Users\nites\Downloads\adult.csv"
+
+df = pd.read_csv(file_path, na_values=" ?")
+
+print("First few rows of the dataset:")
+print(df.head())
+
+age_stats = df["age"].describe()
+print("\nDescriptive statistics for 'age':")
+print(age_stats)
+
+age_mode = df["age"].mode()
+print("\nMode for 'age':")
+print(age_mode)
+
+age_variance = df["age"].var()
+print("\nVariance for 'age':", age_variance)
+
+plt.hist(df["age"], bins=20, edgecolor="black")
+plt.title("Distribution of Age")
+plt.xlabel("Age")
+plt.ylabel("Frequency")
+plt.show()
+
+
+
+												PRACTICAL 2 - B 
+
+
+								Create visualizations (histograms, box plots) to depict the distribution of a
+										variable and analyze its characteristics.
+
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+file_path = r"C:\Users\nites\Downloads\adult.csv"
+
+df = pd.read_csv(file_path, na_values=" ?")
+
+plt.figure(figsize=(10, 6))
+plt.hist(df["age"], bins=20, edgecolor="black")
+plt.title("Distribution of Age")
+plt.xlabel("Age")
+plt.ylabel("Frequency")
+plt.grid(True)
+plt.show()
+
+plt.figure(figsize=(8, 6))
+sns.boxplot(x=df["age"])
+plt.title("Box Plot of Age")
+plt.xlabel("Age")
+plt.show()
+
+
+
+												PRACTICAL 3 - A
+
+								Use a dataset with multiple variables and perform correlation analysis to
+								determine the strength and direction of relationships between pairs of variables.
+
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+from sklearn.linear_model import LinearRegression
+np.random.seed(0)
+advertising_expenditure = np.random.normal(50, 20, 100)
+sales_revenue = 100 + 3 * advertising_expenditure + np.random.normal(0, 10, 100)
+data = pd.DataFrame({
+    'Advertising Expenditure': advertising_expenditure,
+    'Sales Revenue': sales_revenue
+})
+plt.figure(figsize=(10, 6))
+plt.scatter(data['Advertising Expenditure'], data['Sales Revenue'], color='blue')
+plt.title('Relationship between Advertising Expenditure and Sales Revenue')
+plt.xlabel('Advertising Expenditure')
+plt.ylabel('Sales Revenue')
+plt.grid(True)
+plt.show()
+X = data[['Advertising Expenditure']]
+y = data['Sales Revenue']
+model = LinearRegression()
+model.fit(X, y)
+plt.figure(figsize=(10, 6))
+plt.scatter(data['Advertising Expenditure'], data['Sales Revenue'], color='blue')
+plt.plot(data['Advertising Expenditure'], model.predict(X), color='red', linewidth=2)
+plt.title('Linear Regression: Advertising Expenditure vs Sales Revenue')
+plt.xlabel('Advertising Expenditure')
+plt.ylabel('Sales Revenue')
+plt.grid(True)
+plt.show()
+print('Intercept:', model.intercept_)
+print('Coefficient:', model.coef_[0])
+
+												PRACTICAL 3 - B 
+													
+												REGRESSION 
+
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import r2_score
+from mpl_toolkits.mplot3d import Axes3D
+
+np.random.seed(0)
+
+# -------------------- Simple Linear Regression --------------------
+
+advertising = np.random.normal(50, 20, 100)
+sales = 100 + 3 * advertising + np.random.normal(0, 10, 100)
+data = pd.DataFrame({
+    'Ad': advertising,
+    'Sales': sales
+})
+X = data[['Ad']]
+y = data['Sales']
+model = LinearRegression()
+model.fit(X, y)
+pred = model.predict(X)
+sorted_idx = np.argsort(advertising)
+plt.figure(figsize=(10, 6))
+plt.scatter(data['Ad'], data['Sales'])
+plt.plot(advertising[sorted_idx], pred[sorted_idx])
+plt.xlabel('Advertising')
+plt.ylabel('Sales')
+plt.title('Simple Linear Regression')
+plt.show()
+print('Simple Regression R2:', r2_score(y, pred))
+print('Future Predictions (Simple):')
+print(model.predict(np.array([[60], [90], [120]])))
+
+# -------------------- Multiple Linear Regression --------------------
+
+social = np.random.normal(30, 10, 100)
+direct = np.random.normal(20, 5, 100)
+sales_multi = 50 + 2 * social + 3 * direct + np.random.normal(0, 10, 100)
+df = pd.DataFrame({
+    'Social': social,
+    'Direct': direct,
+    'Sales': sales_multi
+})
+X2 = df[['Social', 'Direct']]
+y2 = df['Sales']
+model2 = LinearRegression()
+model2.fit(X2, y2)
+pred2 = model2.predict(X2)
+print('Multiple Regression R2:', r2_score(y2, pred2))
+print('Future Predictions (Multiple):')
+print(model2.predict(np.array([[40, 25], [60, 30], [80, 45]])))
+fig = plt.figure(figsize=(12, 8))
+ax = fig.add_subplot(111, projection='3d')
+ax.scatter(df['Social'], df['Direct'], df['Sales'])
+social_range = np.linspace(df['Social'].min(), df['Social'].max(), 10)
+direct_range = np.linspace(df['Direct'].min(), df['Direct'].max(), 10)
+social_grid, direct_grid = np.meshgrid(social_range, direct_range)
+sales_grid = model2.predict(
+    np.c_[social_grid.ravel(), direct_grid.ravel()]
+).reshape(social_grid.shape)
+ax.plot_surface(social_grid, direct_grid, sales_grid, alpha=0.3)
+ax.set_xlabel('Social Media')
+ax.set_ylabel('Direct Marketing')
+ax.set_zlabel('Sales')
+ax.set_title('3D Multiple Regression')
+plt.show()
+												PRACTICAL 4 - A
+
+								Simulate a probability experiment (e.g., rolling dice) using programming and
+										calculate the probabilities of different outcomes.
+
+
+
+import random
+
+def roll_dice(num_rolls):
+    outcomes = [0] * 6
+    for _ in range(num_rolls):
+        outcome = random.randint(1, 6)
+        outcomes[outcome - 1] += 1
+    probabilities = [count / num_rolls for count in outcomes]
+    return probabilities
+
+num_rolls = 10000
+probabilities = roll_dice(num_rolls)
+
+for outcome, probability in enumerate(probabilities, start=1):
+    print(f"Probability of getting {outcome} is {probability:.4f}")
+
+
+
+												PRACTICAL 4 - B 
+
+									Generate random numbers from various probability distributions (normal,
+											uniform, exponential) and analyze their properties.
+
+
+
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy import stats
+
+# Lognormal distribution plots with different mean and standard deviation values
+X = np.linspace(0, 6, 600)
+std = 1
+mean = 0
+lognorm_distribution = stats.lognorm(s=std, loc=mean)
+lognorm_distribution_pdf = lognorm_distribution.pdf(X)
+fig, ax = plt.subplots(figsize=(9, 6))
+plt.plot(X, lognorm_distribution_pdf, label="μ=0, σ=1", color="blue")
+ax.set_xticks(np.arange(int(min(X)), int(max(X)) + 1))
+std = 0.5
+mean = 0
+lognorm_distribution = stats.lognorm(s=std, loc=mean)
+lognorm_distribution_pdf = lognorm_distribution.pdf(X)
+plt.plot(X, lognorm_distribution_pdf, label="μ=0, σ=0.5", color="green")
+std = 1.5
+mean = 1
+lognorm_distribution = stats.lognorm(s=std, loc=mean)
+lognorm_distribution_pdf = lognorm_distribution.pdf(X)
+plt.plot(X, lognorm_distribution_pdf, label="μ=1, σ=1.5", color="red")
+plt.title("Lognormal Distribution")
+plt.legend()
+plt.show()
+
+# Binomial distribution histogram
+X = np.random.binomial(n=1, p=0.5, size=2000)
+plt.subplots(figsize=(9, 6))
+plt.hist(X, color="purple", edgecolor="black")
+plt.title("Binomial Distribution")
+plt.show()
+
+# Poisson probability mass function calculation
+print(stats.poisson.pmf(k=9, mu=3))
+
+# Poisson distribution histogram
+X = stats.poisson.rvs(mu=3, size=600)
+plt.subplots(figsize=(9, 6))
+plt.hist(X, density=True, edgecolor="black", color="orange")
+plt.title("Poisson Distribution")
+plt.show()
+
+# Chi-squared distribution curves for different degrees of freedom
+X = np.arange(0, 6, 0.25)
+plt.subplots(figsize=(9, 6))
+plt.plot(X, stats.chi2.pdf(X, df=1), label="1 d.o.f", color="blue")
+plt.plot(X, stats.chi2.pdf(X, df=2), label="2 d.o.f", color="green")
+plt.plot(X, stats.chi2.pdf(X, df=3), label="3 d.o.f", color="red")
+plt.title("Chi-squared Distribution")
+plt.legend()
+plt.show()
+
+# Normal distribution histogram
+mean = 0
+std_dev = 1
+num_samples = 1000
+normal_samples = np.random.normal(mean, std_dev, num_samples)
+plt.hist(normal_samples, bins=30, density=True, alpha=0.6, color="green")
+plt.title("Normal Distribution")
+plt.xlabel("Value")
+plt.ylabel("Frequency")
+plt.show()
+
+# Uniform distribution histogram
+low = 0
+high = 1
+uniform_samples = np.random.uniform(low, high, num_samples)
+plt.hist(uniform_samples, bins=30, density=True, alpha=0.6, color="blue")
+plt.title("Uniform Distribution")
+plt.xlabel("Value")
+plt.ylabel("Frequency")
+plt.show()
+
+# Exponential distribution histogram
+lambda_param = 1
+exponential_samples = np.random.exponential(scale=1 / lambda_param, size=num_samples)
+plt.hist(exponential_samples, bins=30, density=True, alpha=0.6, color="red")
+plt.title("Exponential Distribution")
+plt.xlabel("Value")
+plt.ylabel("Frequency")
+plt.show()
+
+
+
+												PRACTICAL 5 
+
+
+									Develop a decision tree model to make business decisions considering
+									uncertainties and associated probabilities at each decision point.
+
+
+import matplotlib.pyplot as plt
+import matplotlib.patches as patches
+decision_tree = {
+    'Decision 1': {
+        'Option A': (0.4, 100),
+        'Option B': (0.6, 80)
+    },
+    'Decision 2': {
+        'Option C': (0.3, 50),
+        'Option D': (0.7, 70)
+    }
+}
+def visualize_decision_tree(tree):
+    fig, ax = plt.subplots(figsize=(12, 6))
+    ax.set_xlim(0, 10)
+    ax.set_ylim(0, 6)
+    ax.axis('off')
+    best_dec, best_opt, best_ev = max(
+        ((d, o, p * pf) for d, opts in tree.items() for o, (p, pf) in opts.items()),
+        key=lambda x: x[2]
+    )
+    ax.add_patch(patches.Circle((1, 3), 0.3, fc='lightblue', ec='black', lw=2))
+    ax.text(1, 3, 'START', ha='center', va='center', fontsize=9, weight='bold')
+    y_positions = [4.5, 1.5]
+    for y, (decision, options) in zip(y_positions, tree.items()):
+        is_best_dec = decision == best_dec
+        ax.plot([1.3, 2.5], [3, y], 'g-' if is_best_dec else 'k-', lw=2)
+        ax.add_patch(
+            patches.Rectangle(
+                (2.5, y - 0.3),
+                0.6,
+                0.6,
+                fc='gold' if is_best_dec else 'lightgreen',
+                ec='black',
+                lw=2
+            )
+        )
+        ax.text(2.8, y, decision, ha='center', va='center', fontsize=9, weight='bold')
+        if is_best_dec:
+            ax.text(2.2, y + 0.4, '★', fontsize=20, color='darkgreen')
+        for offset, (opt, (prob, payoff)) in zip((0.8, -0.8), options.items()):
+            opt_y = y + offset
+            ev = prob * payoff
+            is_best = decision == best_dec and opt == best_opt
+            lw = 3 if is_best else 1
+            ax.plot([3.1, 5.5], [y, opt_y], 'g-' if is_best else 'k-', lw=lw)
+            ax.text(
+                4.3,
+                (y + opt_y) / 2 + 0.1,
+                f'P={prob}',
+                fontsize=7,
+                bbox=dict(
+                    boxstyle='round',
+                    fc='lime' if is_best else 'yellow',
+                    alpha=0.7
+                )
+            )
+            ax.add_patch(
+                patches.Circle(
+                    (5.8, opt_y),
+                    0.25,
+                    fc='gold' if is_best else 'lightcoral',
+                    ec='black',
+                    lw=lw
+                )
+            )
+            ax.text(5.8, opt_y, opt, ha='center', va='center', fontsize=8, weight='bold')
+            ax.add_patch(
+                patches.FancyBboxPatch(
+                    (7.2, opt_y - 0.25),
+                    0.8,
+                    0.5,
+                    boxstyle='round',
+                    fc='lightyellow',
+                    ec='darkgreen' if is_best else 'black',
+                    lw=lw
+                )
+            )
+            ax.text(7.6, opt_y + 0.08, f'${payoff}', ha='center', fontsize=8, weight='bold')
+            ax.text(7.6, opt_y - 0.12, f'EV=${ev:.0f}', ha='center', fontsize=7, color='green')
+    ax.text(
+        5,
+        5.7,
+        f'BEST: {best_dec} → {best_opt} (EV=${best_ev:.1f})',
+        ha='center',
+        fontsize=11,
+        weight='bold',
+        bbox=dict(boxstyle='round', fc='gold', alpha=0.8)
+    )
+    plt.title('Decision Tree Analysis', fontsize=14, weight='bold')
+    plt.tight_layout()
+    plt.savefig('decision_tree.png', dpi=300, bbox_inches='tight')
+    print(f"Best Decision: {best_dec} → {best_opt} (EV=${best_ev:.1f})")
+    plt.show()
+if __name__ == "__main__":
+    visualize_decision_tree(decision_tree)
+
+
+													PRACTICAL 6 - A
+
+									Conduct a survey and collect data from a sample population, ensuring proper
+												sampling techniques are employed.
+
+import random
+
+population = [
+    {"id": 1, "name": "Aarav", "age": 25, "gender": "Male", "favorite_food": "Pizza"},
+    {"id": 2, "name": "Aarushi", "age": 30, "gender": "Female", "favorite_food": "Sushi"},
+    {"id": 3, "name": "Ishaan", "age": 35, "gender": "Male", "favorite_food": "Burger"},
+    {"id": 4, "name": "Diya", "age": 28, "gender": "Female", "favorite_food": "Pasta"},
+    {"id": 5, "name": "Aditya", "age": 40, "gender": "Male", "favorite_food": "Steak"},
+    {"id": 6, "name": "Kavya", "age": 22, "gender": "Female", "favorite_food": "Salad"},
+    {"id": 7, "name": "Aryan", "age": 33, "gender": "Male", "favorite_food": "Tacos"},
+    {"id": 8, "name": "Ananya", "age": 29, "gender": "Female", "favorite_food": "Ramen"},
+    {"id": 9, "name": "Arjun", "age": 27, "gender": "Male", "favorite_food": "Chicken Wings"},
+    {"id": 10, "name": "Khushi", "age": 31, "gender": "Female", "favorite_food": "Sushi"}
+]
+sample_size = 5
+sample = random.sample(population, sample_size)
+print("Sampled Participants:")
+for participant in sample:
+    print(participant)
+
+
+
+
+													PRACTICAL 6 - B 
+
+									Use the Central Limit Theorem to analyze the sampling distribution of a sample
+											mean and estimate population parameters.
+
+import numpy as np
+import matplotlib.pyplot as plt
+population_mean = 50
+population_std = 10
+population_size = 10000
+population_data = np.random.normal(
+    population_mean,
+    population_std,
+    population_size
+)
+sample_size = 100
+num_samples = 1000
+sample_means = []
+for _ in range(num_samples):
+    sample = np.random.choice(
+        population_data,
+        sample_size,
+        replace=False
+    )
+    sample_mean = np.mean(sample)
+    sample_means.append(sample_mean)
+plt.figure(figsize=(10, 6))
+plt.hist(
+    sample_means,
+    bins=30,
+    color='skyblue',
+    edgecolor='black',
+    alpha=0.7
+)
+plt.title('Sampling Distribution of Sample Mean')
+plt.xlabel('Sample Mean')
+plt.ylabel('Frequency')
+plt.grid(True)
+plt.show()
+estimated_population_mean = np.mean(sample_means)
+estimated_population_std = np.std(sample_means)
+print("Estimated Population Mean:", estimated_population_mean)
+print("Estimated Population Standard Deviation:", estimated_population_std)
+
+
+
+													PRACTICAL 7 - A 
+
+
+									Calculate confidence intervals for population means or proportions using
+									sample data and interpret the results in a business context.
+
+
+
+import numpy as np
+from scipy.stats import t
+sample_data = [32, 45, 28, 36, 39, 41, 38, 49, 50, 44]
+sample_mean = np.mean(sample_data)
+sample_std = np.std(sample_data, ddof=1)
+sample_size = len(sample_data)
+confidence_level = 0.95
+degrees_of_freedom = sample_size - 1
+t_score = t.ppf((1 + confidence_level) / 2, degrees_of_freedom)
+margin_of_error = t_score * (sample_std / np.sqrt(sample_size))
+lower_bound = sample_mean - margin_of_error
+upper_bound = sample_mean + margin_of_error
+print("Sample Mean:", sample_mean)
+print("Margin of Error:", margin_of_error)
+print("Confidence Interval:", (lower_bound, upper_bound))
+
+
+
+													PRACTICAL 7 -  B
+
+
+										Apply bootstrapping techniques to estimate confidence intervals for non
+												parametric statistics.
+
+
+import numpy as np
+sample_data = np.array([32, 45, 28, 36, 39, 41, 38, 49, 50, 44])
+num_bootstraps = 1000
+def compute_median(bootstrap_sample):
+    return np.median(bootstrap_sample)
+bootstrap_medians = []
+for _ in range(num_bootstraps):
+    bootstrap_sample = np.random.choice(
+        sample_data,
+        size=len(sample_data),
+        replace=True
+    )
+    bootstrap_median = compute_median(bootstrap_sample)
+    bootstrap_medians.append(bootstrap_median)
+confidence_level = 0.95
+lower_percentile = (1 - confidence_level) / 2 * 100
+upper_percentile = (1 + confidence_level) / 2 * 100
+confidence_interval = np.percentile(
+    bootstrap_medians,
+    [lower_percentile, upper_percentile]
+)
+print("Bootstrap Confidence Interval for Median:", confidence_interval)
+
+
+
+													PRACTICAL 8 
+
+
+									a. Formulate null and alternative hypotheses related to a business problem,
+									conduct a hypothesis test using appropriate statistical tests, and interpret the
+													results.
+									b. Perform A/B testing on a website or marketing campaign to evaluate the
+									effectiveness of different strategies and make data-driven decisions.
+
+import numpy as np
+from scipy import stats
+strategy_A_sales = np.array([1000, 1200, 1100, 1300, 1400])
+strategy_B_sales = np.array([900, 1100, 1000, 1200, 1300])
+t_statistic, p_value = stats.ttest_ind(strategy_A_sales, strategy_B_sales)
+print("Hypothesis Testing Results:")
+print("t-statistic:", t_statistic)
+print("p-value:", p_value)
+visitors_A = 1000
+conversions_A = 100
+visitors_B = 1200
+conversions_B = 130
+p_A = conversions_A / visitors_A
+p_B = conversions_B / visitors_B
+p_pool = (conversions_A + conversions_B) / (visitors_A + visitors_B)
+z_statistic = (p_A - p_B) / np.sqrt(
+    p_pool * (1 - p_pool) * (1 / visitors_A + 1 / visitors_B)
+)
+p_value_AB = 2 * (1 - stats.norm.cdf(np.abs(z_statistic)))
+print("\nA/B Testing Results:")
+print("z-statistic:", z_statistic)
+print("p-value:", p_value_AB)
+
+
+
+													PRACTICAL 9 
+
+
+									a. Develop a regression model to predict future sales based on historical data,
+									assess model performance, and interpret the significance of predictor variables.
+									b. Apply time series analysis techniques (e.g., ARIMA, exponential smoothing)
+									to forecast future demand for a product or service, and evaluate the accuracy of
+									the forecasts.
+
+
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_squared_error
+from statsmodels.tsa.arima.model import ARIMA
+from statsmodels.tsa.holtwinters import ExponentialSmoothing
+np.random.seed(0)
+dates = pd.date_range(start='2020-01-01', periods=100, freq='D')
+sales = 100 + np.random.randn(100).cumsum()
+sales_data = pd.DataFrame({
+    'Date': dates,
+    'Sales': sales
+})
+def regression_analysis(data):
+    X = pd.to_numeric(data['Date']).values.reshape(-1, 1)
+    y = data['Sales'].values
+    X_train, X_test, y_train, y_test = train_test_split(
+        X, y, test_size=0.2, random_state=42
+    )
+    model = LinearRegression()
+    model.fit(X_train, y_train)
+    y_pred = model.predict(X_test)
+    mse = mean_squared_error(y_test, y_pred)
+    print("Mean Squared Error (MSE) for regression model:", mse)
+    plt.figure(figsize=(10, 6))
+    plt.plot(data['Date'], data['Sales'], label='Actual Sales')
+    plt.scatter(pd.to_datetime(X_test.flatten()), y_pred, label='Predicted Sales')
+    plt.title('Regression Model: Actual vs Predicted Sales')
+    plt.xlabel('Date')
+    plt.ylabel('Sales')
+    plt.legend()
+    plt.show()
+    print("Intercept:", model.intercept_)
+    print("Coefficient (slope):", model.coef_[0])
+def time_series_analysis_arima(data):
+    model = ARIMA(data['Sales'], order=(5, 1, 0))
+    model_fit = model.fit()
+    forecast = model_fit.forecast(steps=10)
+    print("ARIMA Forecasted Sales:")
+    print(forecast)
+    plt.figure(figsize=(10, 6))
+    plt.plot(data['Date'], data['Sales'], label='Actual Sales')
+    future_dates = pd.date_range(
+        start=data['Date'].iloc[-1] + pd.Timedelta(days=1),
+        periods=10,
+        freq='D'
+    )
+    plt.plot(future_dates, forecast, label='Forecasted Sales')
+    plt.title('ARIMA Forecast: Actual vs Forecasted Sales')
+    plt.xlabel('Date')
+    plt.ylabel('Sales')
+    plt.legend()
+    plt.show()
+def time_series_analysis_exponential_smoothing(data):
+    model = ExponentialSmoothing(
+        data['Sales'],
+        seasonal_periods=7,
+        trend='add',
+        seasonal='add'
+    )
+    model_fit = model.fit()
+    forecast = model_fit.forecast(steps=10)
+    print("Exponential Smoothing Forecasted Sales:")
+    print(forecast)
+    plt.figure(figsize=(10, 6))
+    plt.plot(data['Date'], data['Sales'], label='Actual Sales')
+    future_dates = pd.date_range(
+        start=data['Date'].iloc[-1] + pd.Timedelta(days=1),
+        periods=10,
+        freq='D'
+    )
+    plt.plot(future_dates, forecast, label='Forecasted Sales')
+    plt.title('Exponential Smoothing Forecast: Actual vs Forecasted Sales')
+    plt.xlabel('Date')
+    plt.ylabel('Sales')
+    plt.legend()
+    plt.show()
+def main():
+    print("Regression Analysis:")
+    regression_analysis(sales_data)
+
+    print("\nTime Series Analysis - ARIMA:")
+    time_series_analysis_arima(sales_data)
+
+    print("\nTime Series Analysis - Exponential Smoothing:")
+    time_series_analysis_exponential_smoothing(sales_data)
+if __name__ == "__main__":
+    main()
+
+
+
+													PRACICAL 10 - A 
+
+										a. Formulate an optimization model (e.g., linear programming, integer
+										programming) to solve a real-world business problem and analyze the optimal
+										Solution.
+
+
+from pulp import LpMaximize, LpProblem, LpVariable, LpInteger
+model = LpProblem(name="maximize_profit", sense=LpMaximize)
+x_A = LpVariable(name="x_A", lowBound=0, cat=LpInteger)
+x_B = LpVariable(name="x_B", lowBound=0, cat=LpInteger)
+profit_per_A = 10
+profit_per_B = 15
+model += profit_per_A * x_A + profit_per_B * x_B
+resource_constraint = 100
+resource_usage_A = 3
+resource_usage_B = 4
+model += resource_usage_A * x_A + resource_usage_B * x_B <= resource_constraint
+model.solve()
+print("Optimal Solution:")
+print("Product A:", x_A.varValue)
+print("Product B:", x_B.varValue)
+print("Maximum Profit:", model.objective.value())
+
+
+
+													PRACTICAL 10 - B 
+
+
+									b. Use simulation modeling to evaluate different business scenarios, such as
+									capacity planning, inventory management, or pricing strategies, and assess
+									their impact on performance metrics.
+
+
+
+import numpy as np
+import matplotlib.pyplot as plt
+initial_inventory = 100
+mean_demand = 50
+std_demand = 10
+num_periods = 100
+inventory_levels = [initial_inventory]
+for _ in range(num_periods):
+    demand = np.random.normal(mean_demand, std_demand)
+    inventory_level = max(0, inventory_levels[-1] - demand)
+    inventory_levels.append(inventory_level)
+plt.plot(range(num_periods + 1), inventory_levels)
+plt.title('Inventory Level over Time')
+plt.xlabel('Time Period')
+plt.ylabel('Inventory Level')
+plt.grid(True)
+plt.show()
+
+
+
+
+													PRACTICAL 11 
+
+
+									a. Design and conduct an experiment to study the effects of different factors on a
+									specific response variable, analyze the results using analysis of variance
+									(ANOVA), and draw conclusions.
+									b. Implement a factorial experiment and analyze the main effects and interaction
+									effects of factors using statistical techniques.
+
+
+import numpy as np
+import pandas as pd
+from scipy.stats import f_oneway
+fertilizer_types = ['Organic', 'Chemical']
+watering_freq = ['Daily', 'Alternate-day']
+num_replications = 5
+np.random.seed(42)
+data = []
+for fert in fertilizer_types:
+    for water in watering_freq:
+        heights = np.random.normal(loc=30, scale=5, size=num_replications)
+        data.extend(
+            zip(
+                [fert] * num_replications,
+                [water] * num_replications,
+                heights
+            )
+        )
+df = pd.DataFrame(
+    data,
+    columns=['Fertilizer', 'Watering', 'Height']
+)
+anova_results = {}
+for factor in ['Fertilizer', 'Watering']:
+    factor_levels = df[factor].unique()
+    samples = [
+        df[df[factor] == level]['Height']
+        for level in factor_levels
+    ]
+    anova_results[factor] = f_oneway(*samples)
+interaction_effect = (
+    df.groupby(['Fertilizer', 'Watering'])['Height']
+    .mean()
+    .unstack()
+    .diff(axis=1)
+    .iloc[:, -1]
+)
+print("ANOVA Results:")
+for factor, result in anova_results.items():
+    print(
+        f"{factor}: F-value = {result.statistic}, p-value = {result.pvalue}"
+    )
+print("\nInteraction Effect:")
+print(interaction_effect)
